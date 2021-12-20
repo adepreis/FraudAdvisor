@@ -6,7 +6,7 @@
 
 - [Working guide for the project](./doc/[FRENCH]_Fraud_Detection_Polytech_Project.pdf) :fr:
 
-All remaining bugs are listed [here](https://github.com/???/???/issues).
+All remaining bugs are listed [here](https://github.com/adepreis/FakeAdvisor/issues).
 
 ## Getting Started
 
@@ -16,11 +16,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 Things you need to install the project :
 
-- [Jupyter](https://jupyter.org) (???)
+- [Jupyter](https://jupyter.org) (_???_)
 - [Python 3](https://www.python.org/downloads)
 	- [cplex](https://pypi.org/project/cplex/) library
-	- [NumPy](http://numpy.org) library (???)
-	- [Matplotlib](http://matplotlib.org) library (???)
+	- [NumPy](http://numpy.org) library (_???_)
+	- [Matplotlib](http://matplotlib.org) library (_???_)
 
 ### Running
 
@@ -28,9 +28,9 @@ Here are some instructions on how to get the development env running.
 
 First, clone this repository with the following command :
 
-	$ git clone https://github.com/???/???.git
+	$ git clone https://github.com/adepreis/FakeAdvisor.git
 
-Then, after moving into the `/???` folder just created, start Jupyter using :
+Then, after moving into the `/FakeAdvisor` folder just created, start Jupyter using :
 
 	$ jupyter notebook
 
@@ -79,3 +79,7 @@ You should place its `tripadvisor_european_restaurants.csv` dataset file at the 
 
 In the `/doc` folder, you can find a brief [report](./doc/[FRENCH]_Project_Report.pdf) that explains the design choices and contains result screenshots.
 -->
+
+---
+
+Built with ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
