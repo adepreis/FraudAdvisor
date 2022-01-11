@@ -1,4 +1,4 @@
-# TripAdvisor FraudDetection / FraudyDetector / FraudyResto / FakeAdvisor / FraudAdvisor / TripAdvisFraud
+# FraudAdvisor
 
 "Stochastic programming" project - Polytech ET5 IT - Noted for S9 (2021-2022)
 
