@@ -1,12 +1,12 @@
 # FraudAdvisor
 
-"Stochastic programming" project - Polytech ET5 IT - Noted for S9 (2021-2022)
+Stochastic programming project - Polytech ET5 IT - Noted for S9 (2021-2022)
 
 ## Asked work
 
 - [Working guide for the project](./doc/[FRENCH]_Fraud_Detection_Polytech_Project.pdf) :fr:
 
-All remaining bugs are listed [here](https://github.com/adepreis/FakeAdvisor/issues).
+All remaining bugs are listed [here](https://github.com/adepreis/FraudAdvisor/issues).
 
 ## Getting Started
 
@@ -16,12 +16,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 Things you need to install the project :
 
-- [Jupyter](https://jupyter.org) (_???_)
 - [Python 3](https://www.python.org/downloads)
 	- [cplex](https://pypi.org/project/cplex/) library
+	- [MarkovSc's fraudar](https://github.com/MarkovSc/fraudar) forked library
+		- `pip3 install git+https://github.com/MarkovSc/fraudar.git@master`
+	- [PyQt5](https://pypi.org/project/PyQt5) library
 	- [NumPy](http://numpy.org) library (_???_)
 	- [Matplotlib](http://matplotlib.org) library (_???_)
-	- [PyQt5](https://pypi.org/project/PyQt5) library (_???_)
+- [Jupyter](https://jupyter.org) (_???_)
 
 ### Running
 
@@ -29,9 +31,20 @@ Here are some instructions on how to get the development env running.
 
 First, clone this repository with the following command :
 
-	$ git clone https://github.com/adepreis/FakeAdvisor.git
+	$ git clone https://github.com/adepreis/FraudAdvisor.git
 
-Then, after moving into the `/FakeAdvisor` folder just created, start Jupyter using :
+Then, after moving into the `/FraudAdvisor` folder just created, you can run _fraudar_ using :
+
+```bash
+python run_greedy.py dataset/DATASET_NAME.txt out/
+```
+
+> Just make sure that you adapt `DATASET_NAME` and MarkovSc's fraudar fork is installed locally.
+
+---
+
+<!--
+Then, after moving into the `/FraudAdvisor` folder just created, start Jupyter using :
 
 	$ jupyter notebook
 
@@ -43,8 +56,6 @@ if you are a Windows user.
 
 This should open up your browser (if it doesn't, visit [127.0.0.1:8888](http://127.0.0.1:8888/tree)), and you should see Jupyter's tree view, with the contents of the current directory.
 
----
-<!--
 
 ### How it works
 
@@ -66,12 +77,20 @@ et l’approche FRAUDAR)
 ---
 -->
 
-## Dataset
+## Datasets
 <!-- ask the user to download it by itself because of file size -->
+
+#### Amazon
+
+Used Amazon dataset can be found under [Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/#amazon) distributed in the framework of the Stanford Network Analysis Platform (SNAP) by Jure Leskovec and Andrej Krevl.
+
+Dataset files should be placed in the `/dataset` folder.
+
+#### TripAdvisor (**NOT WORKING**)
 
 The used dataset has been shared by [Stefano Leone](https://www.kaggle.com/stefanoleone992) under _TripAdvisor European restaurants_ [kaggle repository](https://www.kaggle.com/stefanoleone992/tripadvisor-european-restaurants/version/1) under [CC0 license](https://creativecommons.org/publicdomain/zero/1.0/).
 
-You should place its `tripadvisor_european_restaurants.csv` dataset file at the root of the project.
+You should place its `tripadvisor_european_restaurants.csv` dataset file in the `/dataset` folder.
 
 <!--
 ---

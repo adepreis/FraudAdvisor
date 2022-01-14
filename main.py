@@ -58,6 +58,8 @@ class WidgetGallery(QDialog):
         self.setWindowTitle("FraudAdvisor")
         self.changeStyle('Fusion')
 
+        outputLabel = QLabel("<h2>Output</h2>")
+
         self.textEdit = QTextEdit() # QPlainTextEdit() ??
         self.textEdit.setPlainText("Twinkle, twinkle, little star,\n"
                               "How I wonder what you are.\n" 
@@ -75,8 +77,11 @@ class WidgetGallery(QDialog):
         disableWidgetsCheckBox.toggled.connect(self.topLeftGroupBox.setDisabled)
         disableWidgetsCheckBox.toggled.connect(self.topRightGroupBox.setDisabled)
 
+        outputLayout = QVBoxLayout()
+        outputLayout.addWidget(outputLabel)
+        outputLayout.addWidget(self.textEdit)
         topLayout = QHBoxLayout()
-        topLayout.addWidget(self.textEdit)
+        topLayout.addLayout(outputLayout)
         # topLayout.addStretch(1)
         topLayout.addWidget(disableWidgetsCheckBox)
 
@@ -117,7 +122,7 @@ class WidgetGallery(QDialog):
         return response[0]
 
     def createTopLeftGroupBox(self):
-        self.topLeftGroupBox = QGroupBox("Dataset")
+        self.topLeftGroupBox = QGroupBox("<h3>Dataset</h3>")
         layout = QVBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
@@ -139,7 +144,7 @@ class WidgetGallery(QDialog):
         self.topLeftGroupBox.setLayout(layout)    
 
     def createTopRightGroupBox(self):
-        self.topRightGroupBox = QGroupBox("Execution")
+        self.topRightGroupBox = QGroupBox("<h3>Execution</h3>")
 
         runLabel = QLabel("Algorithme de détection de fraude :")
 
