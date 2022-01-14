@@ -58,14 +58,14 @@ class WidgetGallery(QDialog):
         self.setWindowTitle("FraudAdvisor")
         self.changeStyle('Fusion')
 
-        textEdit = QTextEdit() # QPlainTextEdit() ??
-        textEdit.setPlainText("Twinkle, twinkle, little star,\n"
+        self.textEdit = QTextEdit() # QPlainTextEdit() ??
+        self.textEdit.setPlainText("Twinkle, twinkle, little star,\n"
                               "How I wonder what you are.\n" 
                               "Up above the world so high,\n"
                               "Like a diamond in the sky.\n")
-        textEdit.setReadOnly(True)
+        self.textEdit.setReadOnly(True)
         # if new_message:
-        #     textEdit.appendPlainText(new_message)
+        #     self.textEdit.appendPlainText(new_message)
         disableWidgetsCheckBox = QCheckBox("&Disable widgets")
 
         self.createTopLeftGroupBox()
@@ -76,8 +76,8 @@ class WidgetGallery(QDialog):
         disableWidgetsCheckBox.toggled.connect(self.topRightGroupBox.setDisabled)
 
         topLayout = QHBoxLayout()
-        topLayout.addWidget(textEdit)
-        topLayout.addStretch(1)
+        topLayout.addWidget(self.textEdit)
+        # topLayout.addStretch(1)
         topLayout.addWidget(disableWidgetsCheckBox)
 
         mainLayout = QGridLayout()
@@ -90,6 +90,7 @@ class WidgetGallery(QDialog):
         mainLayout.setColumnStretch(0, 1)
         mainLayout.setColumnStretch(1, 1)
         self.setLayout(mainLayout)
+        self.selectedDataset = ''
 
     def changeStyle(self, styleName):
         QApplication.setStyle(QStyleFactory.create(styleName))
@@ -109,6 +110,10 @@ class WidgetGallery(QDialog):
             filter=file_filter
         )
         print(response)
+
+        if response[0] != '':
+            self.selectedDataset = response[0]
+            self.textEdit.append("Vous avez sélectionné le dataset : " + self.selectedDataset)
         return response[0]
 
     def createTopLeftGroupBox(self):
@@ -122,16 +127,12 @@ class WidgetGallery(QDialog):
         lineEdit.setPlaceholderText('Pas de dataset chargé')
         # lineEdit.setEchoMode(QLineEdit.Password)
 
-        slider = QSlider(Qt.Horizontal, self.topLeftGroupBox)
-        slider.setValue(40)
-        
         flatPushButton = QPushButton("Charger le dataset")
         flatPushButton.setFlat(True)
         flatPushButton.clicked.connect(self.selectFile)
 
         layout.addWidget(dataLabel)
         layout.addWidget(lineEdit)
-        layout.addWidget(slider)
         layout.addWidget(flatPushButton)
 
         layout.addStretch(1)

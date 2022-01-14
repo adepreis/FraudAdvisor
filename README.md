@@ -21,6 +21,7 @@ Things you need to install the project :
 	- [cplex](https://pypi.org/project/cplex/) library
 	- [NumPy](http://numpy.org) library (_???_)
 	- [Matplotlib](http://matplotlib.org) library (_???_)
+	- [PyQt5](https://pypi.org/project/PyQt5) library (_???_)
 
 ### Running
 
@@ -82,4 +83,4 @@ In the `/doc` folder, you can find a brief [report](./doc/[FRENCH]_Project_Repor
 
 ---
 
-Built with ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+Built with ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white)
