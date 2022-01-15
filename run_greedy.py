@@ -17,36 +17,45 @@
 # Date: Oct 3, 2016
 # Main Contact: Bryan Hooi (bhooi@andrew.cmu.edu)
 
-import numpy as np
-
-# runs the greedy algorithm. first argument is path to data file. second argument is name to save
-# pickle containing results.
-import time
-start_time = time.time()
-from fraudar import *
 import sys
-M = export.greedy.readData(sys.argv[1])
-print("finished reading data: shape = ", M.shape, " @ ", time.time() - start_time)
+import time
+import numpy as np
+from fraudar import *
 
-# (m, n) = (500, 500)
-# M = M[0:m, 0:n]
-# M[0:20, 0:20] = 1
-# M2 = M.toarray().astype(int)
-# print np.transpose(np.nonzero(M2))
-# np.savetxt('example.txt', np.transpose(np.nonzero(M2)), fmt='%d')
+def run_greedy(filename, output_dir):
+	"""Function that wraps fraudar's greedy algorithm.
 
-# M, rowFilter, colFilter = subsetAboveDegree(M, int(sys.argv[3]), int(sys.argv[4]))
-# filter_name = "output/%s_%s_%s_filter.pickle" % (sys.argv[2], sys.argv[3], sys.argv[4])
-# pickle.dump((rowFilter, colFilter), open(filter_name, "wb" ))
-# print "finished subsetting: shape = ", M.shape, " @ ", time.time() - start_time
-# subset_filepath = '%s_%s_%s.txt' % (sys.argv[2], sys.argv[3], sys.argv[4])
-# pickle.dump(M, open(subset_filepath, "wb"))
-# np.savetxt(subset_filepath, M.nonzero().transpose(), fmt='%i')
+	First argument is path to data file.
+	Second argument is name to save pickle containing results.
+	"""
+	start_time = time.time()
+	M = export.greedy.readData(filename)
+	print("finished reading data: shape = ", M.shape, " @ ", time.time() - start_time)
 
-print("finished writing data", " @ ", time.time() - start_time)
-lwRes = logWeightedAveDegree(M)
-print(lwRes)
-np.savetxt("%s.rows" % (sys.argv[2], ), np.array(list(lwRes[0][0])), fmt='%d')
-np.savetxt("%s.cols" % (sys.argv[2], ), np.array(list(lwRes[0][1])), fmt='%d')
-print("score obtained is ", lwRes[1])
-print("done @ ", time.time() - start_time)
+	# (m, n) = (500, 500)
+	# M = M[0:m, 0:n]
+	# M[0:20, 0:20] = 1
+	# M2 = M.toarray().astype(int)
+	# print np.transpose(np.nonzero(M2))
+	# np.savetxt('example.txt', np.transpose(np.nonzero(M2)), fmt='%d')
+
+	# M, rowFilter, colFilter = subsetAboveDegree(M, int(sys.argv[3]), int(sys.argv[4]))
+	# filter_name = "output/%s_%s_%s_filter.pickle" % (output_dir, sys.argv[3], sys.argv[4])
+	# pickle.dump((rowFilter, colFilter), open(filter_name, "wb" ))
+	# print "finished subsetting: shape = ", M.shape, " @ ", time.time() - start_time
+	# subset_filepath = '%s_%s_%s.txt' % (output_dir, sys.argv[3], sys.argv[4])
+	# pickle.dump(M, open(subset_filepath, "wb"))
+	# np.savetxt(subset_filepath, M.nonzero().transpose(), fmt='%i')
+
+	print("finished writing data", " @ ", time.time() - start_time)
+	lwRes = logWeightedAveDegree(M)
+	print(lwRes)
+	np.savetxt("%s.rows" % (output_dir, ), np.array(list(lwRes[0][0])), fmt='%d')
+	np.savetxt("%s.cols" % (output_dir, ), np.array(list(lwRes[0][1])), fmt='%d')
+	print("score obtained is ", lwRes[1])
+	print("done @ ", time.time() - start_time)
+
+	return lwRes[1]
+
+if __name__ == '__main__':
+	run_greedy(sys.argv[1], sys.argv[2])
