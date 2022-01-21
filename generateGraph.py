@@ -35,7 +35,7 @@ def graphGenerator(nodeNumber, edgeNumber):
     f.write(res)
     f.close()
 
-    print(fileName + " has been generating !")
+    print(fileName + " has been generated !")
 
     return "dataset/" +  fileName
 

@@ -67,7 +67,7 @@ class WidgetGallery(QDialog):
 
         outputLabel = QLabel("<h2>Output</h2>")
 
-        self.textEdit = QTextEdit() # QPlainTextEdit() ??
+        self.textEdit = QTextEdit()
         self.textEdit.setPlaceholderText("Le résultat des opérations s'afficheront ici.\n")
         self.textEdit.setReadOnly(True)
 
@@ -76,11 +76,10 @@ class WidgetGallery(QDialog):
 
         self.createLeftGroupBox()
         self.createRightGroupBox()
+        self.createBottomGroupBox()
         self.createProgressBar()
 
         btnClear.clicked.connect(self.textEdit.clear)
-
-
 
 
         outputLayout = QVBoxLayout()
@@ -107,11 +106,13 @@ class WidgetGallery(QDialog):
         mainLayout.addLayout(topLayout, 0, 0, 1, 2)
         mainLayout.addWidget(self.leftGroupBox, 1, 0)
         mainLayout.addWidget(self.rightGroupBox, 1, 1)
+        mainLayout.addWidget(self.bottomGroupBox, 2, 0, 1, 2)
         # mainLayout.addWidget(self.progressBar, 3, 0, 1, 2)
         mainLayout.setRowStretch(1, 1)
         mainLayout.setRowStretch(2, 1)
         mainLayout.setColumnStretch(0, 1)
         mainLayout.setColumnStretch(1, 1)
+
         self.setLayout(mainLayout)
         self.setStyleSheet('QGroupBox { font-weight: bold; }')
         self.selectedDataset = ''
@@ -132,6 +133,7 @@ class WidgetGallery(QDialog):
 
         if response[0] != '':
             self.selectedDataset = response[0]
+            self.textEdit.append("----------------------------------------------")
             self.textEdit.append("Vous avez sélectionné le dataset : " + self.selectedDataset + "\n")
         return response[0]
 
@@ -140,7 +142,8 @@ class WidgetGallery(QDialog):
             nbNode = int(nbNode)
             nbEdge = int(nbEdge)
             print(nbNode, nbEdge, nbNode+nbEdge)
-            self.selectedDataset = graphGenerator(nbNode, nbEdge) # graphGenerator(nbNode, nbEdge)
+            self.selectedDataset = graphGenerator(nbNode, nbEdge)
+            self.textEdit.append("----------------------------------------------")
             self.textEdit.append("Vous avez généré le dataset : " + self.selectedDataset + "\n")
             self.textEdit.append("Ce dataset est désormais sélectionné.\n")
 
@@ -153,20 +156,26 @@ class WidgetGallery(QDialog):
 
         if self.selectedDataset == '':
             self.textEdit.append("Impossible de lancer l'algo, aucun dataset n'est sélectionné.\n")
+            self.toggleGroupBoxesAvailability()
             return
 
-        self.textEdit.append("Lancement de l'algorithme " + self.algo + "...\n")
         self.textEdit.append("==============================================\n")
+        self.textEdit.append("Lancement de l'algorithme " + self.algo + "...\n")
 
         if self.algo == "fraudar":
             score = run_greedy(self.selectedDataset, "out/out")
             self.textEdit.append("Le score obtenu est " + str(score) + ".\n")
-            self.textEdit.append("Les résultats sont dans le dossier out.\n")
-        elif self.algo == "stocha":
+        elif self.algo == "linear":
             res = run_linear_determinist(self.selectedDataset)
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
+        elif self.algo == "stocha":
+            # res = run_stocha(self.selectedDataset)
+            self.textEdit.append("TODO : bind l'algo stochastique.\n")
+            # self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         else:
             pass
+        
+        self.textEdit.append("Les résultats sont dans le dossier out.\n")
 
         self.toggleGroupBoxesAvailability()
 
@@ -178,15 +187,12 @@ class WidgetGallery(QDialog):
         self.rightGroupBox.setDisabled(oldright)
 
     def createLeftGroupBox(self):
-        self.leftGroupBox = QGroupBox("Mode d'input")
+        self.leftGroupBox = QGroupBox("Dataset")
+
         layout = QVBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
-        layout.addWidget(QLabel("<h4>Dataset</h4>"))
         dataLabel = QLabel("Sélectionnez le dataset à utiliser :")
-
-        # TODO: replace lineEdit with a "selectedDatasetLabel" ?
-        # lineEdit = QLineEdit('', placeholderText='Pas de dataset chargé')
 
         loadDataBtn = QPushButton("Charger le dataset ⬇", cursor=QCursor(Qt.PointingHandCursor))
         # loadDataBtn.setFlat(True)
@@ -199,11 +205,12 @@ class WidgetGallery(QDialog):
         layout.addWidget(loadDataBtn)
         layout.addStretch(1)
 
+        self.leftGroupBox.setLayout(layout)
 
-        layout.addWidget(QLabel("<h1>OU</h1>"))
-        layout.addStretch(1)
-        layout.addWidget(QLabel("<h4>Générer un graphe aléatoire</h4>"))
-        layout.addStretch(1)
+    def createRightGroupBox(self):
+        self.rightGroupBox = QGroupBox("Générer un graphe aléatoire")
+        layout = QVBoxLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
 
         layoutNode = QHBoxLayout()
         rangeLabel = QLabel("Nombre de noeuds à générer :")
@@ -230,10 +237,10 @@ class WidgetGallery(QDialog):
         layout.addWidget(runGraphGen)
 
 
-        self.leftGroupBox.setLayout(layout)
+        self.rightGroupBox.setLayout(layout)
 
-    def createRightGroupBox(self):
-        self.rightGroupBox = QGroupBox("Execution")
+    def createBottomGroupBox(self):
+        self.bottomGroupBox = QGroupBox("Execution")
 
         runLabel = QLabel("Algorithme de détection de fraude :")
 
@@ -242,9 +249,11 @@ class WidgetGallery(QDialog):
         radioBtn2 = QRadioButton("FRAUDAR", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.setChecked(True)
         self.algo = "fraudar"
-        radioBtn3 = QRadioButton("Le nôtre (stochastique)", cursor=QCursor(Qt.PointingHandCursor))
+        radioBtn3 = QRadioButton("Le nôtre (linéaire)", cursor=QCursor(Qt.PointingHandCursor))
+        radioBtn4 = QRadioButton("Le nôtre (stochastique)", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.toggled.connect(lambda: self.updateAlgo("fraudar"))
-        radioBtn3.toggled.connect(lambda: self.updateAlgo("stocha"))
+        radioBtn3.toggled.connect(lambda: self.updateAlgo("linear"))
+        radioBtn4.toggled.connect(lambda: self.updateAlgo("stocha"))
 
         runAlgoBtn = QPushButton("Lancer ⚙", cursor=QCursor(Qt.PointingHandCursor))
         runAlgoBtn.setDefault(True)
@@ -252,13 +261,22 @@ class WidgetGallery(QDialog):
 
         layout = QVBoxLayout()
 
+        rbLayout = QGridLayout()
+        rbLayout.addWidget(radioBtn1, 1, 1)
+        rbLayout.addWidget(radioBtn2, 2, 1)
+        rbLayout.addWidget(radioBtn3, 1, 2)
+        rbLayout.addWidget(radioBtn4, 2, 2)
+
+        rbLayout.setColumnStretch(0, 10)
+        rbLayout.setColumnStretch(1, 10)
+        rbLayout.setColumnStretch(2, 10)
+        rbLayout.setColumnStretch(3, 10)
+
         layout.addWidget(runLabel)
-        layout.addWidget(radioBtn1)
-        layout.addWidget(radioBtn2)
-        layout.addWidget(radioBtn3)
+        layout.addLayout(rbLayout)
         layout.addWidget(runAlgoBtn)
         layout.addStretch(1)
-        self.rightGroupBox.setLayout(layout)
+        self.bottomGroupBox.setLayout(layout)
 
     def createProgressBar(self):
         self.progressBar = QProgressBar()
