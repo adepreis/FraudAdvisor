@@ -1,6 +1,9 @@
 import cplex
 import sys
 import json
+import re
+import time
+import pandas as pd
 
 if (len(sys.argv) == 1):
     print("Please give dataset path as a command argument")
@@ -13,26 +16,40 @@ if (datasetPath.find(".txt") == -1):
     print("Please use a .txt dataset file")
     exit()
 
-nodeSet = []
-graph = dict({})
+leftNode = []
+rightNode = []
 with open(datasetPath, encoding='utf8') as file:
     for line in file:
-        node = line.replace("\n", "").split("   ")
-        minNode = min(node[0], node[1])
-        maxNode = max(node[0], node[1])
+        if (line != "" and line[0] != "#"): # ignore comments at the beginning of datasets
+            node = re.split(r"\s+", line.replace("\n", ""))
+            minNode = min(node[0], node[1])
+            maxNode = max(node[0], node[1])
 
-        if (minNode not in nodeSet):
-            nodeSet.append(minNode)
-        if (maxNode not in nodeSet):
-            nodeSet.append(maxNode)
+            leftNode.append(minNode)
+            rightNode.append(maxNode)
 
-        if (minNode in graph):
-            set = graph.get(minNode)
-            if (maxNode not in set):
-                set.append(maxNode)
-                graph[minNode] = set
-        else:
-            graph[minNode] = [maxNode]
+data = {
+    'Left': leftNode,
+    'Right': rightNode
+}
+
+df = pd.DataFrame(data=data)
+
+setGraph = df.groupby("Left")['Right'].apply(set)
+indexArray = setGraph.index.array
+valuesArray = setGraph.values
+
+nodeSet = []
+graph = dict({})
+for i in range (0, len(indexArray)):
+    leftNode = indexArray[i]
+    rightNodes = list(valuesArray[i])
+    graph[leftNode] = rightNodes
+
+    nodeSet.append(leftNode)
+    for node in rightNodes:
+        nodeSet.append(node)
+nodeSet = list(set(nodeSet))
 
 numberOfNode= len(nodeSet)
 numberOfGraphEdges = 0
@@ -57,6 +74,8 @@ num_constraints = numberOfGraphEdges * 2 + 1
 constraint_types = ["L", "G", "E"] # Less, Greater, Equal
 
 # ============================================================
+
+start_time = time.time()
 
 # Establish the Linear Programming Model
 myProblem = cplex.Cplex()
@@ -140,3 +159,4 @@ print('\nXXXXXXXXXX\n')
 myProblem.solve()
 print('\nObjective value :', myProblem.solution.get_objective_value())
 print('Decision variable values :', myProblem.solution.get_values())
+print("done @ ", time.time() - start_time)
