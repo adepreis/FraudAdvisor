@@ -31,11 +31,13 @@ def graphGenerator(nodeNumber, edgeNumber):
             res = res + str(key) + "   " + str(edge) + "\n"
 
     fileName = str(datetime.datetime.now()).replace("-", "").replace(":", "").replace(" ", "").split(".")[0] + ".txt"
-    f = open("data/" +  fileName, "a")
+    f = open("dataset/" +  fileName, "a")
     f.write(res)
     f.close()
 
     print(fileName + " has been generating !")
+
+    return "dataset/" +  fileName
 
 if __name__ == '__main__':
     if (len(sys.argv) == 1):

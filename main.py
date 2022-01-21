@@ -42,8 +42,8 @@
 
 import os
 from run_greedy import run_greedy
-from test import run_lp_file    # TODO: adapt to our future stochastic program
-# from generateGraph import graphGenerator
+from generateGraph import graphGenerator
+from algorithms import run_linear_determinist
 
 from PyQt5.QtGui import QIcon, QCursor, QIntValidator
 from PyQt5.QtCore import Qt, QTimer, QSize
@@ -135,12 +135,12 @@ class WidgetGallery(QDialog):
             self.textEdit.append("Vous avez sélectionné le dataset : " + self.selectedDataset + "\n")
         return response[0]
 
-    def generateGraph(self, nbNode, nbEdge):
+    def runGraphGenerator(self, nbNode, nbEdge):
         if nbNode != '' and nbEdge != '':
             nbNode = int(nbNode)
             nbEdge = int(nbEdge)
             print(nbNode, nbEdge, nbNode+nbEdge)
-            self.selectedDataset = "./TODO/remplacer/par/graphGenerator(nbNode, nbEdge)/ici" # graphGenerator(nbNode, nbEdge)
+            self.selectedDataset = graphGenerator(nbNode, nbEdge) # graphGenerator(nbNode, nbEdge)
             self.textEdit.append("Vous avez généré le dataset : " + self.selectedDataset + "\n")
             self.textEdit.append("Ce dataset est désormais sélectionné.\n")
 
@@ -156,13 +156,14 @@ class WidgetGallery(QDialog):
             return
 
         self.textEdit.append("Lancement de l'algorithme " + self.algo + "...\n")
+        self.textEdit.append("==============================================\n")
 
         if self.algo == "fraudar":
             score = run_greedy(self.selectedDataset, "out/out")
             self.textEdit.append("Le score obtenu est " + str(score) + ".\n")
+            self.textEdit.append("Les résultats sont dans le dossier out.\n")
         elif self.algo == "stocha":
-            # TODO : adaptation to match with our future stochastic program
-            res = run_lp_file("test.lp")
+            res = run_linear_determinist(self.selectedDataset)
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         else:
             pass
@@ -217,7 +218,7 @@ class WidgetGallery(QDialog):
         rangeEdge.setMaxLength(3)
         
         runGraphGen = QPushButton("Générer ⚙", cursor=QCursor(Qt.PointingHandCursor))
-        runGraphGen.clicked.connect(lambda: self.generateGraph(rangeNode.text(), rangeEdge.text()))
+        runGraphGen.clicked.connect(lambda: self.runGraphGenerator(rangeNode.text(), rangeEdge.text()))
 
         layoutNode.addWidget(rangeLabel)
         layoutNode.addWidget(rangeNode)

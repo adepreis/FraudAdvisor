@@ -1,11 +1,10 @@
 import cplex
 import sys
-import json
 import re
 import time
 import pandas as pd
 
-def run_prog_linear_determinist(datasetPath):
+def run_linear_determinist(datasetPath):
     """
     # Set datapath in argv
     if (len(sys.argv) == 1):
@@ -25,7 +24,8 @@ def run_prog_linear_determinist(datasetPath):
     with open(datasetPath, encoding='utf8') as file:
         for line in file:
             if (line != "" and line[0] != "#"): # ignore comments at  the beginning of datasets
-                node = line.replace("\n", "").split("\t")
+                node = re.split(r"\s+", line.replace("\n", ""))
+                print(node)
                 minNode = min(node[0], node[1])
                 maxNode = max(node[0], node[1])
 
@@ -201,5 +201,5 @@ def run_prog_linear_determinist(datasetPath):
     return myProblem.solution.get_objective_value()
 
 if __name__ == '__main__':
-    dataset = "data/example.txt" # CHEMIN DU DATASET CHOISI
-    print('Objective value :', run_prog_linear_determinist(dataset))
+    dataset = "examples/example.txt" # CHEMIN DU DATASET CHOISI
+    print('Objective value :', run_linear_determinist(dataset))
