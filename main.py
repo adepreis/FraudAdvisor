@@ -44,7 +44,7 @@ import os
 from run_greedy import run_greedy
 from test import run_lp_file    # TODO: adapt to our future stochastic program
 
-from PyQt5.QtGui import QIcon, QCursor
+from PyQt5.QtGui import QIcon, QCursor, QIntValidator
 from PyQt5.QtCore import Qt, QTimer, QSize
 from PyQt5.QtWidgets import (QApplication, QDialog, QLabel,
         QGridLayout, QGroupBox, QHBoxLayout, QVBoxLayout,
@@ -58,7 +58,7 @@ class WidgetGallery(QDialog):
         screenSize = app.primaryScreen().size()
         # print('Size: %d x %d' % (screenSize.width(), screenSize.height()))
         self.setFixedWidth(screenSize.width()*0.4)
-        self.setFixedHeight(screenSize.height()*0.5)
+        self.setFixedHeight(screenSize.height()*0.7)
 
         self.setWindowTitle("FraudAdvisor")
         self.setWindowIcon(QIcon('logo_fraudadvisor.png'))
@@ -79,6 +79,9 @@ class WidgetGallery(QDialog):
 
         btnClear.clicked.connect(self.textEdit.clear)
 
+
+
+
         outputLayout = QVBoxLayout()
         outputLayout.addWidget(outputLabel)
         outputLayout.addWidget(self.textEdit)
@@ -86,11 +89,24 @@ class WidgetGallery(QDialog):
         topLayout.addLayout(outputLayout)
         topLayout.addWidget(btnClear)
 
+
+        # rbDataset = QRadioButton("Dataset", cursor=QCursor(Qt.PointingHandCursor))
+        # rbGraph = QRadioButton("Graphe aléatoire", cursor=QCursor(Qt.PointingHandCursor))
+        # rbDataset.toggled.connect(self.leftGroupBox.setDisabled)
+        # rbGraph.toggled.connect(self.bottomLeftGroupBox.setDisabled)
+
+        # inputModeLayout = QHBoxLayout()
+        # inputModeLayout.addWidget(rbDataset)
+        # inputModeLayout.addWidget(rbGraph)
+        
+        # outputLayout.addLayout(inputModeLayout)
+
+
         mainLayout = QGridLayout()
         mainLayout.addLayout(topLayout, 0, 0, 1, 2)
         mainLayout.addWidget(self.leftGroupBox, 1, 0)
         mainLayout.addWidget(self.rightGroupBox, 1, 1)
-        mainLayout.addWidget(self.progressBar, 3, 0, 1, 2)
+        # mainLayout.addWidget(self.progressBar, 3, 0, 1, 2)
         mainLayout.setRowStretch(1, 1)
         mainLayout.setRowStretch(2, 1)
         mainLayout.setColumnStretch(0, 1)
@@ -117,6 +133,15 @@ class WidgetGallery(QDialog):
             self.selectedDataset = response[0]
             self.textEdit.append("Vous avez sélectionné le dataset : " + self.selectedDataset + "\n")
         return response[0]
+
+    def generateGraph(self, nbNode, nbEdge):
+        if nbNode != '' and nbEdge != '':
+            nbNode = int(nbNode)
+            nbEdge = int(nbEdge)
+            print(nbNode, nbEdge, nbNode+nbEdge)
+            self.selectedDataset = "./TODO/remplacer/par/graphGenerator(nbNode, nbEdge)/ici" # graphGenerator(nbNode, nbEdge)
+            self.textEdit.append("Vous avez généré le dataset : " + self.selectedDataset + "\n")
+            self.textEdit.append("Ce dataset est désormais sélectionné.\n")
 
     def updateAlgo(self, algo):
         self.algo = algo
@@ -151,28 +176,59 @@ class WidgetGallery(QDialog):
         self.rightGroupBox.setDisabled(oldright)
 
     def createLeftGroupBox(self):
-        self.leftGroupBox = QGroupBox("Dataset")
+        self.leftGroupBox = QGroupBox("Mode d'input")
         layout = QVBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
+        layout.addWidget(QLabel("<h4>Dataset</h4>"))
         dataLabel = QLabel("Sélectionnez le dataset à utiliser :")
 
         # TODO: replace lineEdit with a "selectedDatasetLabel" ?
         # lineEdit = QLineEdit('', placeholderText='Pas de dataset chargé')
 
         loadDataBtn = QPushButton("Charger le dataset ⬇", cursor=QCursor(Qt.PointingHandCursor))
-        loadDataBtn.setFlat(True)
+        # loadDataBtn.setFlat(True)
         loadDataBtn.setIcon(QApplication.style().standardIcon(QApplication.style().SP_DirLinkIcon))
         loadDataBtn.setIconSize(QSize(50,50))
         loadDataBtn.clicked.connect(self.selectFile)
 
         layout.addWidget(dataLabel)
         layout.addStretch(1)
-        # layout.addWidget(lineEdit)
         layout.addWidget(loadDataBtn)
         layout.addStretch(1)
 
-        self.leftGroupBox.setLayout(layout)    
+
+        layout.addWidget(QLabel("<h1>OU</h1>"))
+        layout.addStretch(1)
+        layout.addWidget(QLabel("<h4>Générer un graphe aléatoire</h4>"))
+        layout.addStretch(1)
+
+        layoutNode = QHBoxLayout()
+        rangeLabel = QLabel("Nombre de noeuds à générer :")
+        rangeNode = QLineEdit()
+        rangeNode.setValidator(QIntValidator())
+        rangeNode.setMaxLength(3)
+
+        layoutEdge = QHBoxLayout()
+        rangeEdgeLabel = QLabel("Nombre d'arêtes à générer :")
+        rangeEdge = QLineEdit()
+        rangeEdge.setValidator(QIntValidator())
+        rangeEdge.setMaxLength(3)
+        
+        runGraphGen = QPushButton("Générer ⚙", cursor=QCursor(Qt.PointingHandCursor))
+        runGraphGen.clicked.connect(lambda: self.generateGraph(rangeNode.text(), rangeEdge.text()))
+
+        layoutNode.addWidget(rangeLabel)
+        layoutNode.addWidget(rangeNode)
+        layoutEdge.addWidget(rangeEdgeLabel)
+        layoutEdge.addWidget(rangeEdge)
+
+        layout.addLayout(layoutNode)
+        layout.addLayout(layoutEdge)
+        layout.addWidget(runGraphGen)
+
+
+        self.leftGroupBox.setLayout(layout)
 
     def createRightGroupBox(self):
         self.rightGroupBox = QGroupBox("Execution")
