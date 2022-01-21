@@ -17,22 +17,23 @@ nodeSet = []
 graph = dict({})
 with open(datasetPath, encoding='utf8') as file:
     for line in file:
-        node = line.replace("\n", "").split("   ")
-        minNode = min(node[0], node[1])
-        maxNode = max(node[0], node[1])
+        if (line != "" and line[0] != "#"): # ignore comments at  the beginning of datasets
+            node = line.replace("\n", "").split("\t")
+            minNode = min(node[0], node[1])
+            maxNode = max(node[0], node[1])
 
-        if (minNode not in nodeSet):
-            nodeSet.append(minNode)
-        if (maxNode not in nodeSet):
-            nodeSet.append(maxNode)
+            if (minNode not in nodeSet):
+                nodeSet.append(minNode)
+            if (maxNode not in nodeSet):
+                nodeSet.append(maxNode)
 
-        if (minNode in graph):
-            set = graph.get(minNode)
-            if (maxNode not in set):
-                set.append(maxNode)
-                graph[minNode] = set
-        else:
-            graph[minNode] = [maxNode]
+            if (minNode in graph):
+                set = graph.get(minNode)
+                if (maxNode not in set):
+                    set.append(maxNode)
+                    graph[minNode] = set
+            else:
+                graph[minNode] = [maxNode]
 
 numberOfNode= len(nodeSet)
 numberOfGraphEdges = 0
