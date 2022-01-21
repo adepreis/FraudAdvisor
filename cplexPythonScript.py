@@ -140,4 +140,16 @@ print('\nXXXXXXXXXX\n')
 # Solve the model and print the answer
 myProblem.solve()
 print('\nObjective value :', myProblem.solution.get_objective_value())
-print('Decision variable values :', myProblem.solution.get_values())
+
+print('\nDecision variable values :')
+values = myProblem.solution.get_values()
+real_names = [ 'x' + str(i) + '_' + str(j) for i in graph for j in graph[i] ]
+real_names += [ 'y' + str(i) for i in graph ]
+for i in graph:
+    for j in graph[i]:
+        if ('y' + str(j) not in real_names):
+            real_names += [ 'y' + str(j) ]
+
+assert(len(values) == len(real_names))
+for i in range (len(real_names)):
+    print(real_names[i] + ' = ' + str(values[i]))
