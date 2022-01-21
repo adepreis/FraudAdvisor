@@ -2,6 +2,9 @@
 
 Stochastic programming project - Polytech ET5 IT - Noted for S9 (2021-2022)
 
+![App screenshot](./doc/Capture.png)
+
+
 ## Asked work
 
 - [Working guide for the project](./doc/[FRENCH]_Fraud_Detection_Polytech_Project.pdf) :fr:
@@ -21,9 +24,12 @@ Things you need to install the project :
 	- [MarkovSc's fraudar](https://github.com/MarkovSc/fraudar) forked library
 		- `pip3 install git+https://github.com/MarkovSc/fraudar.git@master`
 	- [PyQt5](https://pypi.org/project/PyQt5) library
+<!--
+
 	- [NumPy](http://numpy.org) library (_???_)
 	- [Matplotlib](http://matplotlib.org) library (_???_)
 - [Jupyter](https://jupyter.org) (_???_)
+-->
 
 ### Running
 
@@ -36,7 +42,7 @@ First, clone this repository with the following command :
 Then, after moving into the `/FraudAdvisor` folder just created, you can run _fraudar_ using :
 
 ```bash
-python run_greedy.py dataset/DATASET_NAME.txt out/
+python run_greedy.py dataset/DATASET_NAME.txt out/out
 ```
 
 > Just make sure that you adapt `DATASET_NAME` and MarkovSc's fraudar fork is installed locally.
@@ -66,16 +72,16 @@ et l’approche FRAUDAR)
 - Ajouter une interface graphique permettant de simuler sur différents datasets pour ”benchmarker” les solutions
 
 ---
+-->
 
 ### Authors
 
 * **Lucas B.** - @0xWryth
 * **Antonin D.** - @adepreis
-* **...** - @
-* **...** - @
+* **R T.** - @skyreymz
+* **TMW V.** - @TMWilliam
 
 ---
--->
 
 ## Datasets
 <!-- ask the user to download it by itself because of file size -->
@@ -84,7 +90,7 @@ et l’approche FRAUDAR)
 
 Used Amazon dataset can be found under [Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/#amazon) distributed in the framework of the Stanford Network Analysis Platform (SNAP) by Jure Leskovec and Andrej Krevl.
 
-Dataset files should be placed in the `/dataset` folder.
+Dataset files should be placed in the `/dataset` folder (don't forget to remove top comments).
 
 #### TripAdvisor (**NOT WORKING**)
 
