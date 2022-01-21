@@ -88,8 +88,6 @@ def run_prog_linear_determinist(datasetPath):
 
     # ============================================================
 
-    start_time = time.time()
-
     # Establish the Linear Programming Model
     myProblem = cplex.Cplex()
 
@@ -168,8 +166,12 @@ def run_prog_linear_determinist(datasetPath):
     print('\nXXXXXXXXXX\n')
     """
 
+    start_time = time.time()
+
     # Solve the model
     myProblem.solve()
+
+    print("done @ ", time.time() - start_time)
 
     values = myProblem.solution.get_values()
     real_names = [ 'x' + str(i) + '_' + str(j) for i in graph for j in graph[i] ]
