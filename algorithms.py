@@ -4,7 +4,7 @@ import re
 import time
 import pandas as pd
 
-def run_linear_determinist(datasetPath):
+def run_linear(datasetPath, stochastic):
     """
     # Set datapath in argv
     if (len(sys.argv) == 1):
@@ -130,12 +130,20 @@ def run_linear_determinist(datasetPath):
             local_counter += 1
             global_counter += 1
     # CONSTRAINT (6)
-    myProblem.linear_constraints.add(
-        lin_expr = [cplex.SparsePair(ind = ['x' + str(i) for i in range(numberOfGraphEdges, numberOfGraphEdges + numberOfNode)], val = [1.0] * numberOfNode)],
-        rhs = [1],
-        names = ['c'+str(global_counter)],
-        senses = constraint_types[0]
-    )
+    if (not stochastic) : # determinist
+        myProblem.linear_constraints.add(
+            lin_expr = [cplex.SparsePair(ind = ['x' + str(i) for i in range(numberOfGraphEdges, numberOfGraphEdges + numberOfNode)], val = [1.0] * numberOfNode)],
+            rhs = [1],
+            names = ['c'+str(global_counter)],
+            senses = constraint_types[0]
+        )
+    else:
+        myProblem.linear_constraints.add(
+            lin_expr = [cplex.SparsePair(ind = ['x' + str(i) for i in range(numberOfGraphEdges, numberOfGraphEdges + numberOfNode)], val = [1.0] * numberOfNode)],
+            rhs = [numberOfNode],
+            names = ['c'+str(global_counter)],
+            senses = constraint_types[0]
+        )
 
     # Add objective function and set its sense
     for i in range(numberOfGraphEdges):
@@ -201,5 +209,5 @@ def run_linear_determinist(datasetPath):
     return myProblem.solution.get_objective_value()
 
 if __name__ == '__main__':
-    dataset = "examples/example.txt" # CHEMIN DU DATASET CHOISI
-    print('Objective value :', run_linear_determinist(dataset))
+    dataset = "examples/example4.txt" # CHEMIN DU DATASET CHOISI
+    print('Objective value :', run_linear(dataset, stochastic=False))

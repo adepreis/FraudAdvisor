@@ -43,7 +43,7 @@
 import os
 from run_greedy import run_greedy
 from generateGraph import graphGenerator
-from algorithms import run_linear_determinist
+from algorithms import run_linear
 
 from PyQt5.QtGui import QIcon, QCursor, QIntValidator
 from PyQt5.QtCore import Qt, QTimer, QSize
@@ -166,12 +166,12 @@ class WidgetGallery(QDialog):
             score = run_greedy(self.selectedDataset, "out/out")
             self.textEdit.append("Le score obtenu est " + str(score) + ".\n")
         elif self.algo == "linear":
-            res = run_linear_determinist(self.selectedDataset)
+            res = run_linear(self.selectedDataset, stochastic=False)
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         elif self.algo == "stocha":
-            # res = run_stocha(self.selectedDataset)
-            self.textEdit.append("TODO : bind l'algo stochastique.\n")
-            # self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
+            res = run_linear(self.selectedDataset, stochastic=True)
+            #self.textEdit.append("TODO : bind l'algo stochastique.\n")
+            self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         else:
             pass
         
