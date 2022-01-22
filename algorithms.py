@@ -130,7 +130,7 @@ def run_linear(datasetPath, stochastic):
             local_counter += 1
             global_counter += 1
     # CONSTRAINT (6)
-    if (not stochastic) : # determinist
+    if (not stochastic) : # deterministic
         myProblem.linear_constraints.add(
             lin_expr = [cplex.SparsePair(ind = ['x' + str(i) for i in range(numberOfGraphEdges, numberOfGraphEdges + numberOfNode)], val = [1.0] * numberOfNode)],
             rhs = [1],
