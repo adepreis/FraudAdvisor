@@ -25,7 +25,7 @@ def run_linear(datasetPath):
         for line in file:
             if (line != "" and line[0] != "#"): # ignore comments at  the beginning of datasets
                 node = re.split(r"\s+", line.replace("\n", ""))
-                print(node)
+                #print(node)
                 minNode = min(node[0], node[1])
                 maxNode = max(node[0], node[1])
 
@@ -166,6 +166,8 @@ def run_linear(datasetPath):
     print('\nXXXXXXXXXX\n')
     """
 
+    print('Starting resolution of the problem')
+
     start_time = time.time()
 
     # Solve the model
@@ -201,5 +203,5 @@ def run_linear(datasetPath):
     return myProblem.solution.get_objective_value()
 
 if __name__ == '__main__':
-    dataset = "examples/example4.txt" # CHEMIN DU DATASET CHOISI
+    dataset = "../Dataset/Amazon0302.txt" # CHEMIN DU DATASET CHOISI
     print('Objective value :', run_linear(dataset))
