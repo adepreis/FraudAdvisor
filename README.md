@@ -4,7 +4,6 @@ Stochastic programming project - Polytech ET5 IT - Noted for S9 (2021-2022)
 
 ![App screenshot](./doc/Capture.png)
 
-
 ## Asked work
 
 - [Working guide for the project](./doc/[FRENCH]_Fraud_Detection_Polytech_Project.pdf) :fr:
@@ -20,16 +19,11 @@ These instructions will get you a copy of the project up and running on your loc
 Things you need to install the project :
 
 - [Python 3](https://www.python.org/downloads)
-	- [cplex](https://pypi.org/project/cplex/) library
+	- [cplex](https://pypi.org/project/cplex) library
 	- [MarkovSc's fraudar](https://github.com/MarkovSc/fraudar) forked library
 		- `pip3 install git+https://github.com/MarkovSc/fraudar.git@master`
 	- [PyQt5](https://pypi.org/project/PyQt5) library
-<!--
-
-	- [NumPy](http://numpy.org) library (_???_)
-	- [Matplotlib](http://matplotlib.org) library (_???_)
-- [Jupyter](https://jupyter.org) (_???_)
--->
+	- [pandas](https://pypi.org/project/pandas) library
 
 ### Running
 
@@ -39,35 +33,22 @@ First, clone this repository with the following command :
 
 	$ git clone https://github.com/adepreis/FraudAdvisor.git
 
-Then, after moving into the `/FraudAdvisor` folder just created, you can run _fraudar_ using :
+Then, after moving into the `/FraudAdvisor` folder just created, you can run the UI using :
 
 ```bash
-python run_greedy.py dataset/DATASET_NAME.txt out/out
+python main.py
 ```
 
-> Just make sure that you adapt `DATASET_NAME` and MarkovSc's fraudar fork is installed locally.
+> Just make sure that MarkovSc's fraudar fork is installed locally to be able to use FRAUDAR algorithm.
 
 ---
 
 <!--
-Then, after moving into the `/FraudAdvisor` folder just created, start Jupyter using :
-
-	$ jupyter notebook
-
-or 
-
-	> jupyter-notebook.exe
-
-if you are a Windows user.
-
-This should open up your browser (if it doesn't, visit [127.0.0.1:8888](http://127.0.0.1:8888/tree)), and you should see Jupyter's tree view, with the contents of the current directory.
-
 
 ### How it works
 
-- Déployer le code récupéré depuis Git des algorithmes cités (approche spectrale fBOX
-et l’approche FRAUDAR)
-	- Utiliser le package pip `rgmining-fraudar` ou directement le code ??
+- Déployer le code récupéré depuis Git des algorithmes cités (approche spectrale ~~fBOX~~ et l’approche FRAUDAR)
+	- Utiliser MarkovSc's fraudar fork
 - Développer le modèle mathématique d’optimisation stochastique du prof.
 - Ajouter une interface graphique permettant de simuler sur différents datasets pour ”benchmarker” les solutions
 
@@ -78,8 +59,8 @@ et l’approche FRAUDAR)
 
 * **Lucas B.** - @0xWryth
 * **Antonin D.** - @adepreis
-* **R T.** - @skyreymz
-* **TMW V.** - @TMWilliam
+* **Rémy T.** - @skyreymz
+* **TMWilliam V.** - @TMWilliam
 
 ---
 

@@ -6,7 +6,7 @@
 ## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ## All rights reserved.
 ##
-## This file is part of the examples of PyQt.
+## This file is inspired by examples of PyQt (from https://github.com/pyqt/examples).
 ##
 ## $QT_BEGIN_LICENSE:BSD$
 ## You may use this file under the terms of the BSD license as follows:
@@ -42,19 +42,19 @@
 
 import os
 from run_greedy import run_greedy
-from generateGraph import graphGenerator
 from algorithms import run_linear
+from graph_generation import graphGenerator
 
 from PyQt5.QtGui import QIcon, QCursor, QIntValidator
 from PyQt5.QtCore import Qt, QTimer, QSize
-from PyQt5.QtWidgets import (QApplication, QDialog, QLabel,
+from PyQt5.QtWidgets import (QApplication, QWidget, QMainWindow, QLabel,
         QGridLayout, QGroupBox, QHBoxLayout, QVBoxLayout,
         QProgressBar, QPushButton, QRadioButton, QLineEdit,
         QStyleFactory, QTextEdit, QFileDialog)
 
-class WidgetGallery(QDialog):
+class FraudAdvisorUI(QMainWindow):
     def __init__(self, parent=None):
-        super(WidgetGallery, self).__init__(parent)
+        super(FraudAdvisorUI, self).__init__(parent)
 
         screenSize = app.primaryScreen().size()
         # print('Size: %d x %d' % (screenSize.width(), screenSize.height()))
@@ -77,7 +77,7 @@ class WidgetGallery(QDialog):
         self.createLeftGroupBox()
         self.createRightGroupBox()
         self.createBottomGroupBox()
-        self.createProgressBar()
+        # self.createProgressBar()
 
         btnClear.clicked.connect(self.textEdit.clear)
 
@@ -113,7 +113,10 @@ class WidgetGallery(QDialog):
         mainLayout.setColumnStretch(0, 1)
         mainLayout.setColumnStretch(1, 1)
 
-        self.setLayout(mainLayout)
+        window = QWidget()
+        window.setLayout(mainLayout)
+        # QMainWindow needs a central widget as it already has predefined layout:
+        self.setCentralWidget(window)
         self.setStyleSheet('QGroupBox { font-weight: bold; }')
         self.selectedDataset = ''
 
@@ -139,13 +142,11 @@ class WidgetGallery(QDialog):
 
     def runGraphGenerator(self, nbNode, nbEdge):
         if nbNode != '' and nbEdge != '':
-            nbNode = int(nbNode)
-            nbEdge = int(nbEdge)
-            print(nbNode, nbEdge, nbNode+nbEdge)
-            self.selectedDataset = graphGenerator(nbNode, nbEdge)
+            self.selectedDataset = graphGenerator(int(nbNode), int(nbEdge))
             self.textEdit.append("----------------------------------------------")
-            self.textEdit.append("Vous avez généré le dataset : " + self.selectedDataset + "\n")
-            self.textEdit.append("Ce dataset est désormais sélectionné.\n")
+            self.textEdit.append("Vous avez généré le graphe : " + self.selectedDataset + \
+                                " (" + nbNode + " noeuds, " + nbEdge + " arêtes)\n")
+            self.textEdit.append("Ce graphe est désormais sélectionné en tant que dataset.\n")
 
     def updateAlgo(self, algo):
         self.algo = algo
@@ -211,13 +212,11 @@ class WidgetGallery(QDialog):
         layout = QVBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
-        layoutNode = QHBoxLayout()
         rangeLabel = QLabel("Nombre de noeuds à générer :")
         rangeNode = QLineEdit()
         rangeNode.setValidator(QIntValidator())
         rangeNode.setMaxLength(3)
 
-        layoutEdge = QHBoxLayout()
         rangeEdgeLabel = QLabel("Nombre d'arêtes à générer :")
         rangeEdge = QLineEdit()
         rangeEdge.setValidator(QIntValidator())
@@ -226,13 +225,13 @@ class WidgetGallery(QDialog):
         runGraphGen = QPushButton("Générer ⚙", cursor=QCursor(Qt.PointingHandCursor))
         runGraphGen.clicked.connect(lambda: self.runGraphGenerator(rangeNode.text(), rangeEdge.text()))
 
-        layoutNode.addWidget(rangeLabel)
-        layoutNode.addWidget(rangeNode)
-        layoutEdge.addWidget(rangeEdgeLabel)
-        layoutEdge.addWidget(rangeEdge)
+        layoutNodeEdge = QGridLayout()
+        layoutNodeEdge.addWidget(rangeLabel, 0, 0)
+        layoutNodeEdge.addWidget(rangeNode, 0, 1)
+        layoutNodeEdge.addWidget(rangeEdgeLabel, 1, 0)
+        layoutNodeEdge.addWidget(rangeEdge, 1, 1)
 
-        layout.addLayout(layoutNode)
-        layout.addLayout(layoutEdge)
+        layout.addLayout(layoutNodeEdge)
         layout.addWidget(runGraphGen)
 
 
@@ -248,10 +247,10 @@ class WidgetGallery(QDialog):
         radioBtn2 = QRadioButton("FRAUDAR", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.setChecked(True)
         self.algo = "fraudar"
-        radioBtn3 = QRadioButton("Le nôtre (linéaire)", cursor=QCursor(Qt.PointingHandCursor))
+        radioBtn3 = QRadioButton("Le nôtre (déterministe)", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn4 = QRadioButton("Le nôtre (stochastique)", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.toggled.connect(lambda: self.updateAlgo("fraudar"))
-        radioBtn3.toggled.connect(lambda: self.updateAlgo("linear"))
+        radioBtn3.toggled.connect(lambda: self.updateAlgo("deterministic"))
         radioBtn4.toggled.connect(lambda: self.updateAlgo("stocha"))
 
         runAlgoBtn = QPushButton("Lancer ⚙", cursor=QCursor(Qt.PointingHandCursor))
@@ -277,6 +276,7 @@ class WidgetGallery(QDialog):
         layout.addStretch(1)
         self.bottomGroupBox.setLayout(layout)
 
+    # UNUSED functions :
     def createProgressBar(self):
         self.progressBar = QProgressBar()
         self.progressBar.setRange(0, 10000)
@@ -302,7 +302,7 @@ if __name__ == '__main__':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
     
     app = QApplication(sys.argv)
-    gallery = WidgetGallery()
-    gallery.show()
+    window = FraudAdvisorUI()
+    window.show()
 
     sys.exit(app.exec_()) 
