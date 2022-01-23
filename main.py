@@ -166,11 +166,10 @@ class WidgetGallery(QDialog):
             score = run_greedy(self.selectedDataset, "out/out")
             self.textEdit.append("Le score obtenu est " + str(score) + ".\n")
         elif self.algo == "linear":
-            res = run_linear(self.selectedDataset, stochastic=False)
+            res = run_linear(self.selectedDataset)
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         elif self.algo == "stocha":
-            res = run_linear(self.selectedDataset, stochastic=True)
-            #self.textEdit.append("TODO : bind l'algo stochastique.\n")
+            res = run_linear(self.selectedDataset) # same constraints
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         else:
             pass
