@@ -166,10 +166,10 @@ class FraudAdvisorUI(QMainWindow):
         if self.algo == "fraudar":
             score = run_greedy(self.selectedDataset, "out/out")
             self.textEdit.append("Le score obtenu est " + str(score) + ".\n")
-        elif self.algo == "linear":
+        elif self.algo == "determinist":
             res = run_linear(self.selectedDataset)
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
-        elif self.algo == "stocha":
+        elif self.algo == "stochastic":
             res = run_linear(self.selectedDataset) # same constraints
             self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
         else:
@@ -250,8 +250,8 @@ class FraudAdvisorUI(QMainWindow):
         radioBtn3 = QRadioButton("Le nôtre (déterministe)", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn4 = QRadioButton("Le nôtre (stochastique)", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.toggled.connect(lambda: self.updateAlgo("fraudar"))
-        radioBtn3.toggled.connect(lambda: self.updateAlgo("deterministic"))
-        radioBtn4.toggled.connect(lambda: self.updateAlgo("stocha"))
+        radioBtn3.toggled.connect(lambda: self.updateAlgo("determinist"))
+        radioBtn4.toggled.connect(lambda: self.updateAlgo("stochastic"))
 
         runAlgoBtn = QPushButton("Lancer ⚙", cursor=QCursor(Qt.PointingHandCursor))
         runAlgoBtn.setDefault(True)

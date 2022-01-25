@@ -203,5 +203,5 @@ def run_linear(datasetPath):
     return myProblem.solution.get_objective_value()
 
 if __name__ == '__main__':
-    dataset = "../Dataset/Amazon0302.txt" # CHEMIN DU DATASET CHOISI
+    dataset = "examples/example.txt" # CHEMIN DU DATASET CHOISI
     print('Objective value :', run_linear(dataset))
