@@ -55,7 +55,7 @@ def run_greedy(filename, output_dir):
 	print("score obtained is ", lwRes[1])
 	print("done @ ", time.time() - start_time)
 
-	return lwRes[1]
+	return True, lwRes[1]
 
 if __name__ == '__main__':
 	run_greedy(sys.argv[1], sys.argv[2])

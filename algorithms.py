@@ -1,11 +1,17 @@
 import cplex
+import datetime
 import sys
 import re
 import time
 import pandas as pd
 
-def run_linear(datasetPath):
+def run_linear(datasetPath, stochastic):
     """
+    NOTE: IN THE CODE AND DESPITE THE 'stochastic' BOOLEAN PARAMETER,
+        **WE DO NOT** DISTINGUISH THE DETERMINISTIC AND STOCHASTIC ALGORITHMS
+        BECAUSE WE CONCLUDED THAT THEIR CONSTRAINTS ARE THE SAME.
+    
+
     # Set datapath in argv
     if (len(sys.argv) == 1):
         print("Please give dataset path as a command argument")
@@ -171,7 +177,11 @@ def run_linear(datasetPath):
     start_time = time.time()
 
     # Solve the model
-    myProblem.solve()
+    try:
+        myProblem.solve() # can raise CplexSolverError "Problem size exceeded Community Edition limits" !
+    except cplex.exceptions.errors.CplexSolverError as ex:
+        # print(ex.args)
+        return False, "La taille du problème dépasse les limites de la Community Edition, essayez avec un graphique plus petit"
 
     print("done @ ", time.time() - start_time)
 
@@ -195,13 +205,15 @@ def run_linear(datasetPath):
         print(real_names[i] + ' = ' + str(values[i]))
     """
 
-    file = open("./out/decision_variable_values.out", 'w')
+    fileName = "decision_variable_" + ("stochastic_" if stochastic==True else "deterministic_") + str(datetime.datetime.now()).replace("-", "").replace(":", "").replace(" ", "").split(".")[0] + ".out"
+
+    file = open("./out/" + fileName, 'w')
     for i in range (len(real_names)):
         file.write(real_names[i] + ' = ' + str(values[i]) + '\n')
     file.close()
 
-    return myProblem.solution.get_objective_value()
+    return True, myProblem.solution.get_objective_value()
 
 if __name__ == '__main__':
-    dataset = "examples/example.txt" # CHEMIN DU DATASET CHOISI
-    print('Objective value :', run_linear(dataset))
+    dataset = "examples/example.txt" # DATASET PATH
+    print('Objective value :', run_linear(dataset, stochastic=False)[1])

@@ -6,7 +6,7 @@
 ## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ## All rights reserved.
 ##
-## This file is inspired by examples of PyQt (from https://github.com/pyqt/examples).
+## This file is INSPIRED BY examples of PyQt (from https://github.com/pyqt/examples).
 ##
 ## $QT_BEGIN_LICENSE:BSD$
 ## You may use this file under the terms of the BSD license as follows:
@@ -48,9 +48,8 @@ from graph_generation import graphGenerator
 from PyQt5.QtGui import QIcon, QCursor, QIntValidator
 from PyQt5.QtCore import Qt, QTimer, QSize
 from PyQt5.QtWidgets import (QApplication, QWidget, QMainWindow, QLabel,
-        QGridLayout, QGroupBox, QHBoxLayout, QVBoxLayout,
-        QProgressBar, QPushButton, QRadioButton, QLineEdit,
-        QStyleFactory, QTextEdit, QFileDialog)
+        QGridLayout, QGroupBox, QHBoxLayout, QVBoxLayout, QPushButton,
+        QRadioButton, QLineEdit, QStyleFactory, QTextEdit, QFileDialog)
 
 class FraudAdvisorUI(QMainWindow):
     def __init__(self, parent=None):
@@ -77,7 +76,6 @@ class FraudAdvisorUI(QMainWindow):
         self.createLeftGroupBox()
         self.createRightGroupBox()
         self.createBottomGroupBox()
-        # self.createProgressBar()
 
         btnClear.clicked.connect(self.textEdit.clear)
 
@@ -90,24 +88,11 @@ class FraudAdvisorUI(QMainWindow):
         topLayout.addWidget(btnClear)
 
 
-        # rbDataset = QRadioButton("Dataset", cursor=QCursor(Qt.PointingHandCursor))
-        # rbGraph = QRadioButton("Graphe aléatoire", cursor=QCursor(Qt.PointingHandCursor))
-        # rbDataset.toggled.connect(self.leftGroupBox.setDisabled)
-        # rbGraph.toggled.connect(self.bottomLeftGroupBox.setDisabled)
-
-        # inputModeLayout = QHBoxLayout()
-        # inputModeLayout.addWidget(rbDataset)
-        # inputModeLayout.addWidget(rbGraph)
-        
-        # outputLayout.addLayout(inputModeLayout)
-
-
         mainLayout = QGridLayout()
         mainLayout.addLayout(topLayout, 0, 0, 1, 2)
         mainLayout.addWidget(self.leftGroupBox, 1, 0)
         mainLayout.addWidget(self.rightGroupBox, 1, 1)
         mainLayout.addWidget(self.bottomGroupBox, 2, 0, 1, 2)
-        # mainLayout.addWidget(self.progressBar, 3, 0, 1, 2)
         mainLayout.setRowStretch(1, 1)
         mainLayout.setRowStretch(2, 1)
         mainLayout.setColumnStretch(0, 1)
@@ -163,19 +148,24 @@ class FraudAdvisorUI(QMainWindow):
         self.textEdit.append("==============================================\n")
         self.textEdit.append("Lancement de l'algorithme " + self.algo + "...\n")
 
+        succeeded, res = False, "Une erreur a mis fin à l'execution de l'algorithme.\n"
+
         if self.algo == "fraudar":
-            score = run_greedy(self.selectedDataset, "out/out")
-            self.textEdit.append("Le score obtenu est " + str(score) + ".\n")
-        elif self.algo == "determinist":
-            res = run_linear(self.selectedDataset)
-            self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
+            succeeded, res = run_greedy(self.selectedDataset, "out/out")
+        elif self.algo == "deterministic":
+            succeeded, res = run_linear(self.selectedDataset, stochastic=False)
         elif self.algo == "stochastic":
-            res = run_linear(self.selectedDataset) # same constraints
-            self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
+            succeeded, res = run_linear(self.selectedDataset, stochastic=True) # different parameter but same constraints
         else:
             pass
         
-        self.textEdit.append("Les résultats sont dans le dossier out.\n")
+        
+        # Guide user to algo output if there is a score
+        if succeeded:
+            self.textEdit.append("Le résultat obtenu est " + str(res) + ".\n")
+            self.textEdit.append("Les résultats sont dans le dossier out.\n")
+        else:
+            self.textEdit.append("Erreur : " + str(res) + ".\n")
 
         self.toggleGroupBoxesAvailability()
 
@@ -195,7 +185,6 @@ class FraudAdvisorUI(QMainWindow):
         dataLabel = QLabel("Sélectionnez le dataset à utiliser :")
 
         loadDataBtn = QPushButton("Charger le dataset ⬇", cursor=QCursor(Qt.PointingHandCursor))
-        # loadDataBtn.setFlat(True)
         loadDataBtn.setIcon(QApplication.style().standardIcon(QApplication.style().SP_DirLinkIcon))
         loadDataBtn.setIconSize(QSize(50,50))
         loadDataBtn.clicked.connect(self.selectFile)
@@ -234,8 +223,8 @@ class FraudAdvisorUI(QMainWindow):
         layout.addLayout(layoutNodeEdge)
         layout.addWidget(runGraphGen)
 
-
         self.rightGroupBox.setLayout(layout)
+
 
     def createBottomGroupBox(self):
         self.bottomGroupBox = QGroupBox("Execution")
@@ -247,10 +236,10 @@ class FraudAdvisorUI(QMainWindow):
         radioBtn2 = QRadioButton("FRAUDAR", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.setChecked(True)
         self.algo = "fraudar"
-        radioBtn3 = QRadioButton("Le nôtre (déterministe)", cursor=QCursor(Qt.PointingHandCursor))
-        radioBtn4 = QRadioButton("Le nôtre (stochastique)", cursor=QCursor(Qt.PointingHandCursor))
+        radioBtn3 = QRadioButton("Approche linéaire déterministe", cursor=QCursor(Qt.PointingHandCursor))
+        radioBtn4 = QRadioButton("Approche linéaire stochastique", cursor=QCursor(Qt.PointingHandCursor))
         radioBtn2.toggled.connect(lambda: self.updateAlgo("fraudar"))
-        radioBtn3.toggled.connect(lambda: self.updateAlgo("determinist"))
+        radioBtn3.toggled.connect(lambda: self.updateAlgo("deterministic"))
         radioBtn4.toggled.connect(lambda: self.updateAlgo("stochastic"))
 
         runAlgoBtn = QPushButton("Lancer ⚙", cursor=QCursor(Qt.PointingHandCursor))
@@ -275,21 +264,6 @@ class FraudAdvisorUI(QMainWindow):
         layout.addWidget(runAlgoBtn)
         layout.addStretch(1)
         self.bottomGroupBox.setLayout(layout)
-
-    # UNUSED functions :
-    def createProgressBar(self):
-        self.progressBar = QProgressBar()
-        self.progressBar.setRange(0, 10000)
-        self.progressBar.setValue(0)
-
-        timer = QTimer(self)
-        timer.timeout.connect(self.advanceProgressBar)
-        timer.start(1000)
-
-    def advanceProgressBar(self):
-        curVal = self.progressBar.value()
-        maxVal = self.progressBar.maximum()
-        self.progressBar.setValue(curVal + (maxVal - curVal) // 100)
 
 
 if __name__ == '__main__':
