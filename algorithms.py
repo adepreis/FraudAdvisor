@@ -4,6 +4,8 @@ import sys
 import re
 import time
 import pandas as pd
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def run_linear(datasetPath, stochastic):
     """
@@ -75,11 +77,18 @@ def run_linear(datasetPath, stochastic):
     for key in graph:
         numberOfGraphEdges += len(graph[key])
 
-    """
+
+    G = nx.Graph(graph)
+    nx.draw(G, with_labels=True, font_weight='bold')
+    # See https://stackoverflow.com/a/33050617 for non-blocking plot
+    plt.show()
+    
+
     # CHECK
     print('\nXXXXXXXXXX\n\nCHECK\n')
 
     print('Graph :', graph)
+    """
     print ('nodeSet :', nodeSet)
     print('Number of nodes : ', numberOfNode)
     print('Number of graph edges : ',numberOfGraphEdges)

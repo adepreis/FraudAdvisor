@@ -3,6 +3,10 @@ import sys
 import random
 
 def graphGenerator(nodeNumber, edgeNumber):
+    """
+    TODO: use networkx.complete_graph(n[, create_using]) instead ??
+    """
+
     print("Generating a random graph with ", nodeNumber, " nodes and ", edgeNumber, " edges.")
 
     graph = dict({})

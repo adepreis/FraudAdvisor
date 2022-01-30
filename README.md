@@ -47,10 +47,10 @@ python main.py
 
 ### How it works
 
-- Déployer le code récupéré depuis Git des algorithmes cités (approche spectrale ~~fBOX~~ et l’approche FRAUDAR)
-	- Utiliser MarkovSc's fraudar fork
-- Développer le modèle mathématique d’optimisation stochastique du prof.
-- Ajouter une interface graphique permettant de simuler sur différents datasets pour ”benchmarker” les solutions
+- Deployment of code retrieved from Git of ~~fBOX (spectral approach)~~ and FRAUDAR algorithms
+	- Use of MarkovSc's fraudar fork
+- Development of the mathematical model of stochastic optimization provided by our professor
+- the graphical interface allows to simulate different datasets to benchmark the solutions
 
 ---
 -->
@@ -65,27 +65,32 @@ python main.py
 ---
 
 ## Datasets
+
+Course examples (small graphs) can be found in the `/examples` folder, the UI permits to randomly generate graphs but you can also use larger ones such as Amazon or TripAdvisor networks :
+
 <!-- ask the user to download it by itself because of file size -->
 
 #### Amazon
+
+> :warning: **Works with FRAUDAR but too large for our approaches**
 
 Used Amazon dataset can be found under [Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/#amazon) distributed in the framework of the Stanford Network Analysis Platform (SNAP) by Jure Leskovec and Andrej Krevl.
 
 Dataset files should be placed in the `/dataset` folder (don't forget to remove top comments).
 
-#### TripAdvisor (**NOT WORKING**)
+#### TripAdvisor
+
+> :construction: **NOT WORKING, not adapted data structure**
 
 The used dataset has been shared by [Stefano Leone](https://www.kaggle.com/stefanoleone992) under _TripAdvisor European restaurants_ [kaggle repository](https://www.kaggle.com/stefanoleone992/tripadvisor-european-restaurants/version/1) under [CC0 license](https://creativecommons.org/publicdomain/zero/1.0/).
 
 You should place its `tripadvisor_european_restaurants.csv` dataset file in the `/dataset` folder.
 
-<!--
 ---
 
 ## Documentation
 
 In the `/doc` folder, you can find a brief [report](./doc/[FRENCH]_Project_Report.pdf) that explains the design choices and contains result screenshots.
--->
 
 ---
 
